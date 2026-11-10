@@ -1,0 +1,268 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  username     String   @unique
+  passwordHash String
+  avatarUrl    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  level           UserLevel?
+  streak          LearningStreak?
+  documents       Document[]
+  quizAttempts    QuizAttempt[]
+  xpTransactions  XPTransaction[]
+  achievements    UserAchievement[]
+  recommendations Recommendation[]
+
+  @@map("users")
+}
+
+model UserLevel {
+  id      String @id @default(uuid())
+  userId  String @unique
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  level   Int    @default(1)
+  xp      Int    @default(0)
+  totalXp Int    @default(0)
+
+  @@map("user_levels")
+}
+
+model LearningStreak {
+  id             String    @id @default(uuid())
+  userId         String    @unique
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currentStreak  Int       @default(0)
+  longestStreak  Int       @default(0)
+  lastActivityAt DateTime?
+  streakStartAt  DateTime?
+
+  @@map("learning_streaks")
+}
+
+model Document {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title         String
+  originalName  String
+  fileType      String
+  fileSize      Int
+  storageUrl    String?
+  storageKey    String?
+  status        String   @default("pending")
+  extractedText String?  @db.Text
+  pageCount     Int?
+  wordCount     Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  topics   Topic[]
+  quizzes  Quiz[]
+  missions Mission[]
+
+  @@map("documents")
+}
+
+model Topic {
+  id          String   @id @default(uuid())
+  documentId  String
+  document    Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  name        String
+  description String?  @db.Text
+  parentId    String?
+  parent      Topic?   @relation("TopicHierarchy", fields: [parentId], references: [id])
+  children    Topic[]  @relation("TopicHierarchy")
+  orderIndex  Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  questions Question[]
+  missions  Mission[]
+
+  @@map("topics")
+}
+
+model Quiz {
+  id            String   @id @default(uuid())
+  documentId    String
+  document      Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  title         String
+  difficulty    String   @default("medium")
+  mode          String   @default("standard")
+  duration      Int      @default(600)
+  questionCount Int      @default(10)
+  passingScore  Int      @default(60)
+  createdAt     DateTime @default(now())
+
+  questions Question[]
+  attempts  QuizAttempt[]
+
+  @@map("quizzes")
+}
+
+model Question {
+  id           String   @id @default(uuid())
+  quizId       String
+  quiz         Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  topicId      String?
+  topic        Topic?   @relation(fields: [topicId], references: [id])
+  type         String   @default("mcq")
+  questionText String   @db.Text
+  explanation  String?  @db.Text
+  difficulty   String   @default("medium")
+  orderIndex   Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  options     Option[]
+  userAnswers UserAnswer[]
+
+  @@map("questions")
+}
+
+model Option {
+  id         String   @id @default(uuid())
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  text       String   @db.Text
+  isCorrect  Boolean  @default(false)
+  orderIndex Int      @default(0)
+
+  userAnswers UserAnswer[]
+
+  @@map("options")
+}
+
+model QuizAttempt {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quizId      String
+  quiz        Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  status      String    @default("in_progress")
+  score       Float     @default(0)
+  accuracy    Float     @default(0)
+  timeTaken   Int       @default(0)
+  xpEarned    Int       @default(0)
+  starsEarned Int       @default(0)
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  answers UserAnswer[]
+
+  @@map("quiz_attempts")
+}
+
+model UserAnswer {
+  id         String      @id @default(uuid())
+  attemptId  String
+  attempt    QuizAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  questionId String
+  question   Question    @relation(fields: [questionId], references: [id])
+  optionId   String?
+  option     Option?     @relation(fields: [optionId], references: [id])
+  isCorrect  Boolean     @default(false)
+  timeTaken  Int         @default(0)
+  answeredAt DateTime    @default(now())
+
+  @@map("user_answers")
+}
+
+model XPTransaction {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount        Int
+  reason        String
+  referenceId   String?
+  referenceType String?
+  createdAt     DateTime @default(now())
+
+  @@unique([userId, referenceId, referenceType])
+  @@map("xp_transactions")
+}
+
+model Achievement {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  name        String
+  description String
+  icon        String
+  xpReward    Int      @default(0)
+  condition   String
+  createdAt   DateTime @default(now())
+
+  userAchievements UserAchievement[]
+
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String      @id @default(uuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id])
+  unlockedAt    DateTime    @default(now())
+
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}
+
+model Mission {
+  id          String   @id @default(uuid())
+  documentId  String
+  document    Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  topicId     String?
+  topic       Topic?   @relation(fields: [topicId], references: [id])
+  title       String
+  description String?  @db.Text
+  type        String   @default("standard")
+  difficulty  String   @default("medium")
+  xpReward    Int      @default(50)
+  orderIndex  Int      @default(0)
+  worldIndex  Int      @default(1)
+  isLocked    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  @@map("missions")
+}
+
+model Recommendation {
+  id                String   @id @default(uuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topicId           String?
+  weakTopics        String[]
+  revisionNotes     String   @db.Text
+  practiceQuestions Json?
+  suggestedSequence Json?
+  createdAt         DateTime @default(now())
+  isRead            Boolean  @default(false)
+
+  @@map("recommendations")
+}
+
+model LearningResource {
+  id           String   @id @default(uuid())
+  topicId      String?
+  title        String
+  content      String   @db.Text
+  resourceType String
+  createdAt    DateTime @default(now())
+
+  @@map("learning_resources")
+}
+
