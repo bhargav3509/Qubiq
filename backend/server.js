@@ -39,11 +39,17 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
 app.use('/api/documents', documentRoutes);
+app.use('/documents', documentRoutes);
 app.use('/api/quizzes', quizRoutes);
+app.use('/quizzes', quizRoutes);
 app.use('/api/gamification', gamificationRoutes);
+app.use('/gamification', gamificationRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
+app.use('/leaderboard', leaderboardRoutes);
 app.use('/api/revision', revisionRoutes);
+app.use('/revision', revisionRoutes);
 
 app.get('/', (req, res) => {
   res.json({ status: 'ok', message: '🎮 QUBIQ Backend is running!', health: '/api/health' });
