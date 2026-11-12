@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Trash2, Zap, ChevronRight, RefreshCw, Plus, CheckCircle, Clock, Cpu, XCircle, BookOpen, BookMarked } from 'lucide-react'
+import { Trash2, Zap, ChevronRight, RefreshCw, Plus, CheckCircle, Clock, Cpu, XCircle, BookOpen, BookMarked, Upload } from 'lucide-react'
 import GameLayout from '../components/layout/GameLayout'
 import { LoadingSpinner, EmptyState, DifficultyBadge } from '../components/ui/GameUI'
 import Mascot from '../components/mascot/Mascot'
