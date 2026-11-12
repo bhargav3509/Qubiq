@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Zap, Clock, Target, BookOpen, ChevronDown, AlertCircle, Sword, Swords } from 'lucide-react'
+import { Zap, Clock, Target, BookOpen, ChevronDown, AlertCircle, Sword, Swords, HelpCircle } from 'lucide-react'
 import GameLayout from '../components/layout/GameLayout'
 import { LoadingSpinner, DifficultyBadge } from '../components/ui/GameUI'
 import Mascot from '../components/mascot/Mascot'

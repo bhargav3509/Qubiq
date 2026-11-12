@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Zap, BookOpen, Trophy, Brain, ArrowRight, Star, Upload, Target, FileText, Cpu, Gamepad2, TrendingUp } from 'lucide-react'
+import { Zap, BookOpen, Trophy, Brain, ArrowRight, Star, Upload, Target, FileText, Gamepad2, TrendingUp } from 'lucide-react'
 import Mascot from '../components/mascot/Mascot'
 
 // Animated floating cloud
@@ -156,18 +156,7 @@ export default function LandingPage() {
             <Mascot expression="celebrating" size={140} className="mx-auto mb-6" />
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2 bg-white/80 border-2 border-purple/30
-                       rounded-full px-4 py-2 text-sm font-bold text-purple mb-4 backdrop-blur-sm"
-          >
-            <Zap size={16} className="fill-purple" />
-            AI-Powered Learning Adventure
-          </motion.div>
-
-          <motion.h1
+                    <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
@@ -183,7 +172,7 @@ export default function LandingPage() {
             transition={{ duration: 0.7, delay: 0.4 }}
             className="text-lg md:text-xl font-semibold text-navy/70 mb-8 max-w-xl"
           >
-            Upload your study materials. Let AI transform them into epic quests,
+            Upload your study materials. Transform them into epic quests,
             missions and challenges. Level up your knowledge!
           </motion.p>
 
@@ -224,8 +213,6 @@ export default function LandingPage() {
               <span className="ml-1">Loved by learners</span>
             </div>
             <span>·</span>
-            <span className="flex items-center gap-1"><Cpu size={13} /> Powered by AI</span>
-            <span>·</span>
             <span className="flex items-center gap-1"><Target size={13} /> Personalised</span>
           </motion.div>
         </div>
@@ -252,12 +239,12 @@ export default function LandingPage() {
               {
                 icon: Upload,
                 title: 'Upload & Unlock',
-                description: 'Upload any PDF, DOCX, PPTX or TXT. AI extracts topics and builds your learning world instantly.',
+                description: 'Upload any PDF, DOCX, PPTX or TXT. Topics are extracted and your learning world is built instantly.',
                 color: 'purple',
               },
               {
                 icon: Brain,
-                title: 'AI Quiz Magic',
+                title: 'Quiz Magic',
                 description: 'Get personalised MCQs, true/false questions and challenges generated from YOUR study material.',
                 color: 'sky',
               },
@@ -270,7 +257,7 @@ export default function LandingPage() {
               {
                 icon: Target,
                 title: 'Smart Revision',
-                description: 'AI identifies your weak spots and creates personalised revision missions to fix them.',
+                description: 'Identify your weak spots and tackle personalised revision missions to fix them.',
                 color: 'green',
               },
             ].map((f, i) => (
@@ -304,9 +291,9 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {[
               { number: '1', icon: FileText, title: 'Upload Your Material', description: 'Drop any study file — PDF, Word doc, PowerPoint or plain text.' },
-              { number: '2', icon: Cpu, title: 'AI Analyses Content', description: 'Our AI reads your material, extracts key topics and builds a learning map.' },
-              { number: '3', icon: Gamepad2, title: 'Play & Complete Missions', description: 'Answer AI-generated quizzes, tackle boss battles and earn XP.' },
-              { number: '4', icon: TrendingUp, title: 'Get Personalised Revision', description: 'AI spots your weak areas and creates targeted revision missions just for you.' },
+              { number: '2', icon: Gamepad2, title: 'Topics Extracted', description: 'Your material is read, key topics are extracted and a learning map is built.' },
+              { number: '3', icon: Gamepad2, title: 'Play & Complete Missions', description: 'Answer quizzes, tackle boss battles and earn XP.' },
+              { number: '4', icon: TrendingUp, title: 'Get Personalised Revision', description: 'Weak areas are spotted and targeted revision missions are created just for you.' },
             ].map((step, i) => (
               <motion.div
                 key={i}

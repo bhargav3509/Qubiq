@@ -26,3 +26,4 @@ databases:
     databaseName: qubiq
     user: qubiq_user
     plan: free
+

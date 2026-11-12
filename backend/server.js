@@ -45,6 +45,10 @@ app.use('/api/gamification', gamificationRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/revision', revisionRoutes);
 
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', message: '🎮 QUBIQ Backend is running!', health: '/api/health' });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: '🎮 QUBIQ Backend is running!', timestamp: new Date().toISOString() });
 });
